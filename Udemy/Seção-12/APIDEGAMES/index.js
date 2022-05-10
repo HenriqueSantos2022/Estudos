@@ -1,6 +1,6 @@
-const express = resquire("express");
+const express = require("express");
 const app = express();
-const bodyParser = require("body-Parser");
+const bodyParser = require("body-parser");
 const res = require("express/lib/response");
 
 app.use (bodyParser. urlencoded({extended:false}));
