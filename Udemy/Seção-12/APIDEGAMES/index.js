@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const bodyParser = require("body-Parser");
+const bodyParser = require("body-parser");
 const res = require("express/lib/response");
 const cors = require("cors");
 
@@ -53,7 +53,7 @@ app.get("/games", (req, res) => {
 
 });
 
-app.get("/game/:id", (req, res) => {
+app.get("/games/:id", (req, res) => {
 
     if (isNaN(req.params.id)) {
         res.sendStatus(400);
@@ -74,7 +74,7 @@ app.get("/game/:id", (req, res) => {
 
 });
 
-app.post("/game", (req, res) => {
+app.post("/games", (req, res) => {
 
     var {
         title,
@@ -91,7 +91,7 @@ app.post("/game", (req, res) => {
 
     res.sendStatus(200);
 })
-app.delete("/game/:id", (req, res) => {
+app.delete("/games/:id", (req, res) => {
     if (isNaN(req.params.id)) {
         res.sendStatus(400);
     } else {
@@ -107,7 +107,7 @@ app.delete("/game/:id", (req, res) => {
     }
 });
 
-app.put("/game/:id", (req, res) => {
+app.put("/games/:id", (req, res) => {
     if (isNaN(req.params.id)) {
         res.sendStatus(400);
     } else {
