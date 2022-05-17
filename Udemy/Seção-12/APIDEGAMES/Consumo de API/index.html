@@ -18,6 +18,7 @@
     <button type="button" onclick="crateGame()">Criar</button>
     <hr>
     <h4>Editar games</h4>
+    <input type="text" name="idEdit" id="idEdit" placeholder="ID"readonly><br>
     <input type="text" name="titleEdit" id="titleEdit" placeholder="Titulo"><br>
     <input type="number" name="yearEdit" id="yearEdit" placeholder="Ano"><br>
     <input type="number" name="priceEdit" id="priceEdit" placeholder="Preço"><br>
@@ -68,6 +69,19 @@
         });
     }
 
+    // ESSA FUNCAO EDITA JOGOS ATRAVEZ DA REFERENCIA INPUT/ID-EDIT 
+    function loadForm(li) {
+        var id = li.getAttribute("data-id");
+        var title = li.getAttribute("data-title");
+        var year = li.getAttribute("data-year");
+        var price = li.getAttribute("data-price");
+        document.getElementById("idEdit").value = id;
+        document.getElementById("titleEdit").value = title;
+        document.getElementById("yearEdit").value = year;
+        document.getElementById("priceEdit").value = price;
+
+    }
+
     function start() {
         // PEDINDO AO SERVIDOR A LISTA DE TODOS OS GAMES
         axios.get("http://localhost:7070/games").then(response => {
@@ -76,7 +90,7 @@
 
             games.forEach(game => {
 
-                // CRIANDO E DEFINIDO OS ATRIVUTOS DA NOVA LI/ITEM
+                // CRIANDO E DEFINIDO OS ATRIBUTOS DA NOVA LI/ITEM
                 var li = document.createElement("li");
                 li.setAttribute("data-id", game.id);
                 li.setAttribute("data-title", game.title);
@@ -96,6 +110,7 @@
                 var btnEdit = document.createElement("button");
                 btnEdit.innerHTML = "Editar";
                 btnEdit.addEventListener("click", function () {
+                    loadForm(li);
                     console.log(`TODO: botao de editar`);
                 })
                 li.appendChild(btnEdit)
