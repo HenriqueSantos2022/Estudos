@@ -21,10 +21,7 @@
     <input type="text" name="titleEdit" id="titleEdit" placeholder="Titulo"><br>
     <input type="number" name="yearEdit" id="yearEdit" placeholder="Ano"><br>
     <input type="number" name="priceEdit" id="priceEdit" placeholder="Preço"><br>
-    <button type="button" onclick="crateGame()">Editar</button>
-
-
-
+    <button type="button" onclick="updateGame()">Editar</button>
 </head>
 
 <body>
@@ -33,67 +30,86 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     function crateGame() {
-        var titleinput = document.getElementById("title");
-        var yearinput = document.getElementById("year");
-        var priceinput = document.getElementById("price");
+        // PEGANDO REFERENCIA DOS INPUTS
+        var inputTitle = document.getElementById("title");
+        var inputYear = document.getElementById("year");
+        var inputPrice = document.getElementById("price");
 
+        // PEGANDO OS VALORES DOS INPUTS E CRIANDO A MENSAGEM PARA O SERVIDOR
         var game = {
-            title: titleinput.value,
-            year: yearinput.value,
-            price: priceinput.value,
+            title: inputTitle.value,
+            year: inputYear.value,
+            price: inputPrice.value,
         }
 
+        // ENVIADO DADOS PARA O SERVIDOR API CRIAR O GAME
         axios.post("http://localhost:7070/games", game).then(response => {
             if (response.status == 200) {
                 alert("Game cadastrado!")
             }
-        }).catch(err => {
-            console.log(err);
+        }).catch(error => {
+            console.log(error);
         });
     }
 
-    function deleteGame(ListItem) {
-        var id = ListItem.getAttribute("data-id");
-        axios.delete("http://localhost:7070/games/" + id).then(response => {
+    function updateGame() {
+        console.log("TODO: updateGame");
+    }
+
+    function deleteGame(li) {
+        // PEGA O ID ATRAVEZ DO ATRIBUTO DATA-ID
+        var id = li.getAttribute("data-id");
+
+        // ENVIA PARA O SERVIDOR O PEDIDO DE DELECAO DE UM ITEM
+        axios.delete(`http://localhost:7070/games/${id}`).then(response => {
             alert("Game deletado!")
-        }).catch(err => {
-            console.log(err);
-
+        }).catch(error => {
+            console.log(error);
         });
-
     }
 
-    axios.get("http://localhost:7070/games").then(response => {
-        var games = response.data;
-        var list = document.getElementById("games");
+    function start() {
+        // PEDINDO AO SERVIDOR A LISTA DE TODOS OS GAMES
+        axios.get("http://localhost:7070/games").then(response => {
+            var games = response.data;
+            var ul = document.getElementById("games");
 
-        games.forEach(game => {
-            var item = document.createElement("li");
-            item.setAttribute("data-id", game.id);
-            item.setAttribute("data-title", game.title);
-            item.setAttribute("data-year", game.year);
-            item.setAttribute("data-price", game.price);
+            games.forEach(game => {
 
-            item.innerHTML = game.id + " - " + game.title + "- $" + game.price;
+                // CRIANDO E DEFINIDO OS ATRIVUTOS DA NOVA LI/ITEM
+                var li = document.createElement("li");
+                li.setAttribute("data-id", game.id);
+                li.setAttribute("data-title", game.title);
+                li.setAttribute("data-year", game.year);
+                li.setAttribute("data-price", game.price);
+                li.innerHTML = `${game.id} - ${game.title} - $${game.price}`;
 
-            var deleteBtn = document.createElement("button");
-            deleteBtn.innerHTML = "Deletar";
-            deleteBtn.addEventListener("click", function () {
-                deleteGame(item)
-            })
+                // ADICIONANDO O BOTAO DELETAR AO LI
+                var btnDelete = document.createElement("button");
+                btnDelete.innerHTML = "Deletar";
+                btnDelete.addEventListener("click", function () {
+                    deleteGame(li)
+                })
+                li.appendChild(btnDelete);
 
-            var editBtn = document.createElement("button");
-            editBtn.innerHTML = "Editar";
+                // ADICIONANDO O BOTAO EDITAR AO LI
+                var btnEdit = document.createElement("button");
+                btnEdit.innerHTML = "Editar";
+                btnEdit.addEventListener("click", function () {
+                    console.log(`TODO: botao de editar`);
+                })
+                li.appendChild(btnEdit)
 
-            item.appendChild(deleteBtn);
-            item.appendChild(editBtn)
+                // ADIONANDO A NOVA LI AO UL
+                ul.appendChild(li);
+            });
 
-            list.appendChild(item);
+        }).catch(error => {
+            console.log(error);
         });
+    }
 
-    }).catch(error => {
-        console.log(error);
-    });
+    start()
 </script>
 
 </html>
